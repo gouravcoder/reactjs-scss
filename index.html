@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+		<title>ReactJS SCSS App</title>
+
+		<script>
+			if ( window.location.protocol === 'file:' ) {
+				var styleElm  = document.createElement( 'link' );
+				styleElm.setAttribute( 'rel', 'stylesheet' );
+				styleElm.setAttribute( 'type', 'text/css' );
+				styleElm.setAttribute( 'href', './style.css' );
+				document.getElementsByTagName( 'head' )[0].appendChild( styleElm );
+			}
+		</script>
+
+	</head>
+
+	<body>
+		<div id="root">Loading...</div>
+		<script src="js/app.bundle.js"></script>
+	</body>
+
+</html>
