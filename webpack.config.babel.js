@@ -6,10 +6,9 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 const inDevMode = ( process.env.WEBPACK_ENV == 'development' );
 
 const scssLoaders = () => {
-	if ( inDevMode ) {
-		return 'style-loader!css-loader!postcss-loader!sass?config=otherSassLoaderConfig';
-	}
-	return ExtractTextPlugin.extract( 'style-loader', 'css-loader!postcss-loader!sass-loader?config=otherSassLoaderConfig' );
+	const loaders = [ 'style-loader','css-loader', 'postcss-loader', 'sass-loader?config=otherSassLoaderConfig' ];
+
+	return ( inDevMode ) ? loaders.join('!') : ExtractTextPlugin.extract( loaders[0], loaders.splice(1).join('!') );
 };
 
 const prodPlugins = inDevMode ? [] : [
