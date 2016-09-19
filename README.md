@@ -1,1 +1,3 @@
-# ReactJS SCSS Build system using Webpack
+# ReactJS SCSS ES6/ES2015 Build system using Webpack - with support for purposed ES7 Features* : @Decorators* & Async-Await*
+
+* these may change in the future...
