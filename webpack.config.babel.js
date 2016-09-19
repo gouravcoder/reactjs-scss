@@ -1,5 +1,5 @@
 import path from 'path';
-import webpack from 'webpack';
+import { optimize, NoErrorsPlugin, DefinePlugin } from 'webpack';
 import autoprefixer from 'autoprefixer';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
@@ -13,21 +13,23 @@ const scssLoaders = () => {
 };
 
 const prodPlugins = inDevMode ? [] : [
-	new webpack.optimize.DedupePlugin(),
+	new optimize.DedupePlugin(),
 	new ExtractTextPlugin( '../style.css' ),
-	new webpack.DefinePlugin({
+	new DefinePlugin({
 	  'process.env': {
 	     NODE_ENV: JSON.stringify( 'production' )
 	   }
 	}),
-	new webpack.optimize.UglifyJsPlugin(),
-	new webpack.optimize.AggressiveMergingPlugin(),
-	new webpack.NoErrorsPlugin()
+	new optimize.UglifyJsPlugin(),
+	new optimize.AggressiveMergingPlugin(),
+	new NoErrorsPlugin()
 ];
 
 const config = {
 	devtool: inDevMode ? 'eval-source-map' : null,
   entry: [
+		'babel-regenerator-runtime', // for ES7 @Decorators and Async-Await. runtime shim essentially.
+
 		'./src/js/index',
 		'./src/scss/style'
 	],
@@ -51,7 +53,9 @@ const config = {
 			exclude: /node_modules/,
 			loader: 'babel',
 			query: {
-			  presets: ['es2015', 'stage-0', 'react']
+				cacheDirectory: true,
+        plugins: [ 'transform-decorators-legacy', 'syntax-async-functions', 'transform-async-to-generator' ],
+        presets: [ 'es2015', 'stage-0', 'react' ]
 			}
 		}, {
 			test: /\.scss$/,
@@ -59,7 +63,7 @@ const config = {
 		}]
   },
   plugins: [
-		new webpack.optimize.OccurenceOrderPlugin(),
+		new optimize.OccurenceOrderPlugin(),
 		...prodPlugins
 	],
 	otherSassLoaderConfig: {
